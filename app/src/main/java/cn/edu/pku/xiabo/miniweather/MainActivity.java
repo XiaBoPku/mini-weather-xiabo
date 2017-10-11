@@ -84,8 +84,7 @@ public class MainActivity extends Activity {
         pmQualityTv = (TextView) findViewById(R.id.pm2_5_quality
         );
         pmImg = (ImageView) findViewById(R.id.pm2_5_img);
-        temperatureTv = (TextView) findViewById(R.id.temperature
-        );
+        temperatureTv = (TextView) findViewById(R.id.temperature);
         climateTv = (TextView) findViewById(R.id.climate);
         windTv = (TextView) findViewById(R.id.wind);
         weatherImg = (ImageView) findViewById(R.id.weather_img);
@@ -221,7 +220,7 @@ public class MainActivity extends Activity {
                             eventType = xmlPullParser.next();
                             Log.d("myWeather", "low: " + xmlPullParser.getText());
                             lowCount++;
-                            todayWeather.setUpdatetime(xmlPullParser.getText());
+                            todayWeather.setLow(xmlPullParser.getText());
                         } else if (xmlPullParser.getName().equals("type") && typeCount == 0) {
                             eventType = xmlPullParser.next();
                             Log.d("myWeather", "type: " + xmlPullParser.getText());
