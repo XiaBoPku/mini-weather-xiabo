@@ -1,6 +1,7 @@
 package cn.edu.pku.xiabo.miniweather;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,8 +24,8 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class MainActivity extends Activity {
-    ImageView mUpdateBtn ;
+public class MainActivity extends Activity implements View.OnClickListener {
+    ImageView mUpdateBtn ,mSelectCity;
     private TextView cityTv, timeTv, humidityTv, weekTv, pmDataTv,
             pmQualityTv,
             temperatureTv, climateTv, windTv, city_name_Tv;
@@ -45,6 +46,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weather_info);
+        findViewById(R.id.title_city_manager).setOnClickListener(this);
         mUpdateBtn = (ImageView)findViewById(R.id.title_update_btn);
         mUpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,5 +257,26 @@ public class MainActivity extends Activity {
         climateTv.setText(todayWeather.getType());
         windTv.setText("风力:"+todayWeather.getFengli());
         Toast.makeText(MainActivity.this,"更新成功！",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.title_city_manager:  startActivityForResult(new Intent(this,SelectActivity.class),1); break;
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            String newCityCode= data.getStringExtra("cityCode");
+            Log.d("myWeather", "选择的城市代码为"+newCityCode);
+            if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE) {
+                Log.d("myWeather", "网络OK");
+                queryWeatherCode(newCityCode);
+            } else {
+                Log.d("myWeather", "网络挂了");
+                Toast.makeText(MainActivity.this, "网络挂了！", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
