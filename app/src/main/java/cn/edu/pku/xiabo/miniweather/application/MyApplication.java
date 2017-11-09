@@ -30,12 +30,15 @@ public class MyApplication extends Application {
                 super.run();
                 CityDB.copyCityDBToDataDir(getApplicationContext());
                 mCityArrayList = new CityDB(getApplicationContext()).getAllCity();
-                for(City city:mCityArrayList){
-                    Log.d(TAG,city.toString());
-                }
             }
         }.start();
     }
 
+    public static synchronized MyApplication getInstance(){
+        return instance;
+    }
 
+    public ArrayList<City> getAllCitys(){
+        return mCityArrayList;
+    }
 }
