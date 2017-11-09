@@ -1,4 +1,4 @@
-package cn.edu.pku.xiabo.miniweather;
+package cn.edu.pku.xiabo.miniweather.bean;
 
 /**
  * Created by xiabo on 2017/10/11.

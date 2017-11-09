@@ -1,4 +1,4 @@
-package cn.edu.pku.xiabo.miniweather;
+package cn.edu.pku.xiabo.miniweather.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

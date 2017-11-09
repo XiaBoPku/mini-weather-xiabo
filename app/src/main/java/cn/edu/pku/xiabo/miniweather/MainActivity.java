@@ -24,6 +24,11 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import cn.edu.pku.xiabo.miniweather.bean.TodayWeather;
+import cn.edu.pku.xiabo.miniweather.utils.NetUtil;
+
+import static cn.edu.pku.xiabo.miniweather.R.id.city;
+
 public class MainActivity extends Activity implements View.OnClickListener {
     ImageView mUpdateBtn ,mSelectCity;
     private TextView cityTv, timeTv, humidityTv, weekTv, pmDataTv,
@@ -56,7 +61,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                 if (NetUtil.getNetworkState(MainActivity.this) != NetUtil.NETWORN_NONE) {
                     Log.d("myWeather", "网络OK");
-                    Toast.makeText(MainActivity.this,"heihei",Toast.LENGTH_SHORT).show();
                     queryWeatherCode(cityCode);
                 }else
                 {
@@ -78,7 +82,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     void initView(){
         city_name_Tv = (TextView) findViewById(R.id.title_city_name);
-        cityTv = (TextView) findViewById(R.id.city);
+        cityTv = (TextView) findViewById(city);
         timeTv = (TextView) findViewById(R.id.time);
         humidityTv = (TextView) findViewById(R.id.humidity);
         weekTv = (TextView) findViewById(R.id.week_today);
