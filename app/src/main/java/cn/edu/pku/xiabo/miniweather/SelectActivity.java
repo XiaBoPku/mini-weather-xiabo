@@ -3,6 +3,9 @@ package cn.edu.pku.xiabo.miniweather;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,7 +24,9 @@ import cn.edu.pku.xiabo.miniweather.application.MyApplication;
 
 public class SelectActivity extends BaseActivity {
     ListView cityLV;
-    private ArrayList<City> cities;
+    private ClearEditText clearEditText;
+    private SelectCityAdapter displayCityAdapter;
+    private ArrayList<City> allCities;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +43,12 @@ public class SelectActivity extends BaseActivity {
 
     private void initView() {
         cityLV = (ListView) findViewById(R.id.lv_select_city);
-        cityLV.setAdapter(new SelectCityAdapter());
+        displayCityAdapter = new SelectCityAdapter();
+        cityLV.setAdapter(displayCityAdapter);
         cityLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                editor.putString("main_city_code",cities.get(position).getNum());
+                editor.putString("main_city_code",((City)displayCityAdapter.getItem(position)).getNum());
                 editor.commit();
                 Intent intent = new Intent();
 //                intent.putExtra("cityCode",cities.get(position).getNum());
@@ -50,22 +56,57 @@ public class SelectActivity extends BaseActivity {
                 finish();
             }
         });
+        clearEditText = (ClearEditText) findViewById(R.id.ET_search_city);
+        clearEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(TextUtils.isEmpty(s)){
+                    displayCityAdapter.updateListView(allCities);
+
+                }else {
+                    ArrayList<City> filterArr = new ArrayList<City>();
+                    for(City city:allCities){
+                        if (city.getCity().indexOf(s.toString()) != -1){
+                            filterArr.add(city);
+                        }
+                    }
+                    displayCityAdapter.updateListView(filterArr);
+                }
+            }
+        });
     }
 
     class SelectCityAdapter extends BaseAdapter{
+        private ArrayList<City> filterCityList;
 
         public SelectCityAdapter(){
-            cities = MyApplication.getInstance().getAllCitys();
+            allCities = MyApplication.getInstance().getAllCitys();
+            filterCityList = allCities;
+        }
+
+        public void updateListView(ArrayList<City> newfilter){
+            filterCityList  = newfilter;
+            this.notifyDataSetChanged();
         }
 
         @Override
         public int getCount() {
-            return cities.size();
+            return filterCityList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return cities.get(position);
+            return filterCityList.get(position);
         }
 
         @Override
@@ -75,7 +116,7 @@ public class SelectActivity extends BaseActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            City city = cities.get(position);
+            City city = filterCityList.get(position);
             View view  = View.inflate(SelectActivity.this,R.layout.select_city_item,null);
             TextView cityName = (TextView) view.findViewById(R.id.select_city_item_cityName);
             TextView cityCode = (TextView) view.findViewById(R.id.select_city_item_cityCode);

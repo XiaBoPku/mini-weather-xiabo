@@ -32,8 +32,20 @@
             android:background="#A71717"
             android:gravity="center" />
     </RelativeLayout>
+    <cn.edu.pku.xiabo.miniweather.ClearEditText
+        android:layout_below="@+id/select_title"
+        android:id="@+id/ET_search_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:drawablePadding="6dp"
+        android:textColor="#ff000000"
+        android:textColorHint="#ffcccccc"
+        android:hint="搜索全国城市（中文）"
+        android:background="@drawable/contact_search_box_edittext_keyword_background"
+        android:drawableLeft="@drawable/magnifying_glass"/>
     <ListView
-        android:layout_below="@id/select_title"
+        android:layout_below="@id/ET_search_city"
         android:id="@+id/lv_select_city"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></ListView>
