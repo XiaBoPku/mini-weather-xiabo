@@ -70,6 +70,14 @@ public class City {
         this.num = num;
     }
 
+    public boolean isRelative(String str){
+        if(province.indexOf(str) != -1 || city.indexOf(str) != -1 ||firstPY.indexOf(str) != -1 ||allFirstPY.indexOf(str) != -1 ||allPY.indexOf(str) != -1 || num.indexOf(str) != -1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     @Override
     public String toString() {
         return "City{" +

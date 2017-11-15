@@ -76,7 +76,7 @@ public class SelectActivity extends BaseActivity {
                 }else {
                     ArrayList<City> filterArr = new ArrayList<City>();
                     for(City city:allCities){
-                        if (city.getCity().indexOf(s.toString()) != -1){
+                        if (city.isRelative(s.toString())){
                             filterArr.add(city);
                         }
                     }
