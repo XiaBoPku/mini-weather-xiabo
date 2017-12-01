@@ -1,6 +1,5 @@
 package cn.edu.pku.xiabo.miniweather;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -12,7 +11,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Guide extends Activity implements ViewPager.OnPageChangeListener{
+public class Guide extends BaseActivity implements ViewPager.OnPageChangeListener{
 
     private String TAG = "ViewPager";
 
@@ -32,6 +31,9 @@ public class Guide extends Activity implements ViewPager.OnPageChangeListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.guide);
+        if(!sharedPreferences.getBoolean("isFirstEntry",true)){
+            entryMainActivity();
+        }
         initViews();//动态的加载，需要在ViewPager中显示的视图
         initDots(); //将三个导航圆点对象存入数组中
 
@@ -40,13 +42,18 @@ public class Guide extends Activity implements ViewPager.OnPageChangeListener{
         start_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Guide.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                editor.putBoolean("isFirstEntry",false);
+                editor.commit();
+                entryMainActivity();
             }
         });
     }
 
+    private void entryMainActivity() {
+        Intent intent = new Intent(Guide.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
 
     //动态的加载，需要在ViewPager中显示的视图
