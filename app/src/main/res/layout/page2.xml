@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg2"
+    android:weightSum="1">
+
+    <TextView android:id="@+id/text2"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+
+         />
+
+
+    <Button
+        android:id="@+id/start_btn"
+        android:layout_height="100dp"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:text="点我一下，试试"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="300dp" />
+
+
+</LinearLayout>

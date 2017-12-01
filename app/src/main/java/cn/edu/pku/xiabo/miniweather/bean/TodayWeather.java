@@ -1,5 +1,7 @@
 package cn.edu.pku.xiabo.miniweather.bean;
 
+import java.util.ArrayList;
+
 /**
  * Created by xiabo on 2017/10/11.
  */
@@ -11,108 +13,131 @@ public class TodayWeather {
     private String shidu;
     private String pm25;
     private String quality;
-    private String fengxiang;
-    private String fengli;
-    private String date;
-    private String high;
-    private String low;
-    private String type;
+    private ArrayList<Day> forecastDaysArrayList = new ArrayList<Day>();
 
+    public void addDay(Day day){
+        forecastDaysArrayList.add(day);
+    }
+
+    public ArrayList<Day> getForecastDaysArrayList() {
+        return forecastDaysArrayList;
+    }
+
+    public static class Day{
+        private String fengxiang;
+        private String fengli;
+        private String date;
+        private String high;
+        private String low;
+        private String type;
+
+        public String getFengxiang() {
+            return fengxiang;
+        }
+
+        public void setFengxiang(String fengxiang) {
+            this.fengxiang = fengxiang;
+        }
+
+        public String getFengli() {
+            return fengli;
+        }
+
+        public void setFengli(String fengli) {
+            this.fengli = fengli;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public String getHigh() {
+            return high;
+        }
+
+        public void setHigh(String high) {
+            this.high = high;
+        }
+
+        public String getLow() {
+            return low;
+        }
+
+        public void setLow(String low) {
+            this.low = low;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        @Override
+        public String toString() {
+            return "Day{" +
+                    "fengxiang='" + fengxiang + '\'' +
+                    ", fengli='" + fengli + '\'' +
+                    ", date='" + date + '\'' +
+                    ", high='" + high + '\'' +
+                    ", low='" + low + '\'' +
+                    ", type='" + type + '\'' +
+                    '}';
+        }
+    }
 
     public String getCity() {
         return city;
-    }
-
-    public String getUpdatetime() {
-        return updatetime;
     }
 
     public void setCity(String city) {
         this.city = city;
     }
 
+    public String getUpdatetime() {
+        return updatetime;
+    }
+
     public void setUpdatetime(String updatetime) {
         this.updatetime = updatetime;
-    }
-
-    public void setWendu(String wendu) {
-        this.wendu = wendu;
-    }
-
-    public void setShidu(String shidu) {
-        this.shidu = shidu;
-    }
-
-    public void setPm25(String pm25) {
-        this.pm25 = pm25;
-    }
-
-    public void setQuality(String quality) {
-        this.quality = quality;
-    }
-
-    public void setFengxiang(String fengxiang) {
-        this.fengxiang = fengxiang;
-    }
-
-    public void setFengli(String fengli) {
-        this.fengli = fengli;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public void setHigh(String high) {
-        this.high = high;
-    }
-
-    public void setLow(String low) {
-        this.low = low;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getWendu() {
         return wendu;
     }
 
+    public void setWendu(String wendu) {
+        this.wendu = wendu;
+    }
+
     public String getShidu() {
         return shidu;
+    }
+
+    public void setShidu(String shidu) {
+        this.shidu = shidu;
     }
 
     public String getPm25() {
         return pm25;
     }
 
+    public void setPm25(String pm25) {
+        this.pm25 = pm25;
+    }
+
     public String getQuality() {
         return quality;
     }
 
-    public String getFengxiang() {
-        return fengxiang;
-    }
-
-    public String getFengli() {
-        return fengli;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getHigh() {
-        return high;
-    }
-
-    public String getLow() {
-        return low;
-    }
-
-    public String getType() {
-        return type;
+    public void setQuality(String quality) {
+        this.quality = quality;
     }
 
     @Override
@@ -124,12 +149,6 @@ public class TodayWeather {
                 ", shidu='" + shidu + '\'' +
                 ", pm25='" + pm25 + '\'' +
                 ", quality='" + quality + '\'' +
-                ", fengxiang='" + fengxiang + '\'' +
-                ", fengli='" + fengli + '\'' +
-                ", date='" + date + '\'' +
-                ", high='" + high + '\'' +
-                ", low='" + low + '\'' +
-                ", type='" + type + '\'' +
                 '}';
     }
 }
