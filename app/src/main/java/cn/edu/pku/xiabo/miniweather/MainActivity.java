@@ -1,6 +1,9 @@
 package cn.edu.pku.xiabo.miniweather;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +68,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
         initView();
         updateView();
+
+        updateWidget();
+    }
+
+    private void updateWidget() {
+        isrunning = true;
+        updateAsyn task = new updateAsyn();
+        task.execute();
     }
 
     private void refreshCityCode() {
@@ -339,45 +351,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 }
             }
         }).start();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                HttpURLConnection con=null;
-                TodayWeather todayWeather = null;
-                try{
-                    URL url = new URL(address);
-                    con = (HttpURLConnection)url.openConnection();
-                    con.setRequestMethod("GET");
-                    con.setConnectTimeout(8000);
-                    con.setReadTimeout(8000);
-                    InputStream in = con.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                    StringBuilder response = new StringBuilder();
-                    String str;
-                    while((str=reader.readLine()) != null){
-                        response.append(str);
-                        Log.d("myWeather", str);
-                    }
-                    String responseStr=response.toString();
-                    Log.d("myWeather", responseStr);
-                    todayWeather = parseXML(responseStr);
-                    if(todayWeather != null){
-                        Log.d("myWeather" ,todayWeather.toString());
-                        Message message = Message.obtain();
-                        message.what = UPDATE_TODAY_WEATHER;
-                        message.obj = todayWeather;
-                        handler.sendMessage(message);
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }finally {
-                    if(con != null){
-                        con.disconnect();
-                    }
-                }
-            }
-        }).start();
     }
 
     private TodayWeather parseXML(String xmldata) {
@@ -507,6 +480,78 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 Log.d("myWeather", "网络挂了");
                 Toast.makeText(MainActivity.this, "网络挂了！", Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+
+    private TodayWeather todayweather;//今天的天气,给widget使用
+    public static int[] appWidgetIds;//给widget使用
+    private boolean isrunning = false;//后台线程是否运行
+
+    private class updateAsyn extends AsyncTask<Void, Integer, Void>
+    {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+
+
+            AppWidgetManager manager = AppWidgetManager.getInstance(MainActivity.this);
+            //将更新widget的活动放在这里面
+            WeatherWidget.todayWeather = todayweather;
+            RemoteViews views = WeatherWidget.updateRemoteViews(MainActivity.this);
+            if(views!=null)
+            {
+                manager.updateAppWidget(appWidgetIds,views);
+            }else
+            {
+                Log.d("myinfo","更新失败");
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            while(isrunning){
+                try {
+                    SharedPreferences pref = getSharedPreferences("config", MODE_PRIVATE);
+                    String cityCode = pref.getString("main_city_code", "101010100");
+                    HttpURLConnection con=null;
+                    Thread.sleep(1000);//一个小时自动更新一次
+                    final String address = "http://wthrcdn.etouch.cn/WeatherApi?citykey=" + cityCode;
+
+                    URL url = new URL(address);
+                    con = (HttpURLConnection)url.openConnection();
+                    con.setRequestMethod("GET");
+                    con.setConnectTimeout(8000);
+                    con.setReadTimeout(8000);
+                    InputStream in = con.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    StringBuilder response = new StringBuilder();
+                    String str;
+                    while((str=reader.readLine()) != null){
+                        response.append(str);
+                        Log.d("myWeather", str);
+                    }
+                    String responseStr=response.toString();
+                    Log.d("myWeather", responseStr);
+                    todayweather = parseXML(responseStr);
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                publishProgress(0);
+            }
+            return null;
         }
     }
 }

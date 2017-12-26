@@ -69,8 +69,12 @@ public class CityDB {
             }catch (Exception e){
             }finally {
                 try {
-                    inputStream.close();
-                    fileOutputStream.close();
+                    if(inputStream != null){
+                        inputStream.close();
+                    }
+                    if(fileOutputStream != null){
+                        fileOutputStream.close();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

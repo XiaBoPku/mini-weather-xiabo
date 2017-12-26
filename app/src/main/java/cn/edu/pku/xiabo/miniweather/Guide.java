@@ -1,6 +1,7 @@
 package cn.edu.pku.xiabo.miniweather;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -31,9 +32,6 @@ public class Guide extends BaseActivity implements ViewPager.OnPageChangeListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.guide);
-        if(!sharedPreferences.getBoolean("isFirstEntry",true)){
-            entryMainActivity();
-        }
         initViews();//动态的加载，需要在ViewPager中显示的视图
         initDots(); //将三个导航圆点对象存入数组中
 
@@ -42,18 +40,22 @@ public class Guide extends BaseActivity implements ViewPager.OnPageChangeListene
         start_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editor.putBoolean("isFirstEntry",false);
+                editor.putBoolean("guide",false);
                 editor.commit();
-                entryMainActivity();
+                Intent intent = new Intent(Guide.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
+
+        SharedPreferences pref = getSharedPreferences("config", MODE_PRIVATE);
+        boolean guide = pref.getBoolean("guide", true);
+        if(!guide){
+            startActivity(new Intent(this,MainActivity.class));
+            finish();
+        }
     }
 
-    private void entryMainActivity() {
-        Intent intent = new Intent(Guide.this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
 
 
     //动态的加载，需要在ViewPager中显示的视图
